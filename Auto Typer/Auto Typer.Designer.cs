@@ -32,13 +32,13 @@
             label1 = new Label();
             hotkeytext1 = new Label();
             hotkeytext3 = new Label();
-            Hotkey2 = new Button();
-            Hotkey1 = new Button();
             hotkeytext4 = new Label();
             label = new Label();
             DelayMax = new TextBox();
             DelayMin = new TextBox();
             MainText = new TextBox();
+            Hotkey2 = new NoFocusButton();
+            Hotkey1 = new NoFocusButton();
             SuspendLayout();
             // 
             // hotkeytext2
@@ -81,36 +81,6 @@
             hotkeytext3.TabIndex = 12;
             hotkeytext3.Text = "Text:";
             // 
-            // Hotkey2
-            // 
-            Hotkey2.BackColor = Color.White;
-            Hotkey2.FlatAppearance.BorderSize = 0;
-            Hotkey2.FlatAppearance.MouseDownBackColor = Color.White;
-            Hotkey2.FlatAppearance.MouseOverBackColor = Color.White;
-            Hotkey2.FlatStyle = FlatStyle.Flat;
-            Hotkey2.Location = new Point(197, 78);
-            Hotkey2.Name = "Hotkey2";
-            Hotkey2.Size = new Size(146, 33);
-            Hotkey2.TabIndex = 0;
-            Hotkey2.Text = "F3";
-            Hotkey2.UseVisualStyleBackColor = false;
-            Hotkey2.MouseDown += Hotkey_MouseDown;
-            // 
-            // Hotkey1
-            // 
-            Hotkey1.BackColor = Color.White;
-            Hotkey1.FlatAppearance.BorderSize = 0;
-            Hotkey1.FlatAppearance.MouseDownBackColor = Color.White;
-            Hotkey1.FlatAppearance.MouseOverBackColor = Color.White;
-            Hotkey1.FlatStyle = FlatStyle.Flat;
-            Hotkey1.Location = new Point(197, 30);
-            Hotkey1.Name = "Hotkey1";
-            Hotkey1.Size = new Size(146, 33);
-            Hotkey1.TabIndex = 14;
-            Hotkey1.Text = "F2";
-            Hotkey1.UseVisualStyleBackColor = false;
-            Hotkey1.MouseDown += Hotkey_MouseDown;
-            // 
             // hotkeytext4
             // 
             hotkeytext4.AutoSize = true;
@@ -135,19 +105,21 @@
             // 
             DelayMax.BorderStyle = BorderStyle.None;
             DelayMax.Location = new Point(395, 353);
+            DelayMax.MaxLength = 13;
             DelayMax.Multiline = true;
             DelayMax.Name = "DelayMax";
             DelayMax.Size = new Size(147, 33);
             DelayMax.TabIndex = 19;
             DelayMax.Text = "250";
             DelayMax.TextAlign = HorizontalAlignment.Center;
-            DelayMax.TextChanged += DelayMax_TextChanged;
             DelayMax.KeyPress += Delay_KeyPress;
+            DelayMax.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // DelayMin
             // 
             DelayMin.BorderStyle = BorderStyle.None;
             DelayMin.Location = new Point(197, 353);
+            DelayMin.MaxLength = 13;
             DelayMin.Multiline = true;
             DelayMin.Name = "DelayMin";
             DelayMin.Size = new Size(147, 33);
@@ -155,6 +127,7 @@
             DelayMin.Text = "150";
             DelayMin.TextAlign = HorizontalAlignment.Center;
             DelayMin.KeyPress += Delay_KeyPress;
+            DelayMin.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // MainText
             // 
@@ -162,29 +135,63 @@
             MainText.Location = new Point(197, 146);
             MainText.Multiline = true;
             MainText.Name = "MainText";
+            MainText.ScrollBars = ScrollBars.Both;
             MainText.Size = new Size(507, 181);
             MainText.TabIndex = 13;
             MainText.Text = "Insert Text Here";
+            MainText.PreviewKeyDown += Form_PreviewKeyDown;
+            // 
+            // Hotkey2
+            // 
+            Hotkey2.BackColor = Color.White;
+            Hotkey2.FlatAppearance.BorderSize = 0;
+            Hotkey2.FlatAppearance.MouseDownBackColor = Color.White;
+            Hotkey2.FlatAppearance.MouseOverBackColor = Color.White;
+            Hotkey2.FlatStyle = FlatStyle.Flat;
+            Hotkey2.Location = new Point(197, 78);
+            Hotkey2.Name = "Hotkey2";
+            Hotkey2.Size = new Size(146, 33);
+            Hotkey2.TabIndex = 21;
+            Hotkey2.Text = "F3";
+            Hotkey2.UseVisualStyleBackColor = false;
+            Hotkey2.MouseDown += Hotkey_MouseDown;
+            Hotkey2.PreviewKeyDown += Form_PreviewKeyDown;
+            // 
+            // Hotkey1
+            // 
+            Hotkey1.BackColor = Color.White;
+            Hotkey1.FlatAppearance.BorderSize = 0;
+            Hotkey1.FlatAppearance.MouseDownBackColor = Color.White;
+            Hotkey1.FlatAppearance.MouseOverBackColor = Color.White;
+            Hotkey1.FlatStyle = FlatStyle.Flat;
+            Hotkey1.Location = new Point(197, 30);
+            Hotkey1.Name = "Hotkey1";
+            Hotkey1.Size = new Size(146, 33);
+            Hotkey1.TabIndex = 22;
+            Hotkey1.Text = "F2";
+            Hotkey1.UseVisualStyleBackColor = false;
+            Hotkey1.MouseDown += Hotkey_MouseDown;
+            Hotkey1.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // AutoTyper
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(Hotkey1);
+            Controls.Add(Hotkey2);
             Controls.Add(MainText);
             Controls.Add(DelayMin);
             Controls.Add(DelayMax);
             Controls.Add(label);
             Controls.Add(hotkeytext4);
-            Controls.Add(Hotkey1);
-            Controls.Add(Hotkey2);
             Controls.Add(hotkeytext3);
             Controls.Add(label1);
             Controls.Add(hotkeytext2);
             Controls.Add(hotkeytext1);
             Name = "AutoTyper";
             Text = "Auto Typer";
-            MouseDown += Hotkey_MouseDown;
+            PreviewKeyDown += Form_PreviewKeyDown;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -195,11 +202,11 @@
         private Label hotkeytext1;
         private Label hotkeytext3;
         private TextBox MainText;
-        private Button Hotkey2;
-        private Button Hotkey1;
         private Label hotkeytext4;
         private Label label;
         private TextBox DelayMax;
         private TextBox DelayMin;
+        private NoFocusButton Hotkey2;
+        private NoFocusButton Hotkey1;
     }
 }

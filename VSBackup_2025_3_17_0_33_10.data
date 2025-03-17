@@ -1,0 +1,66 @@
+[
+  {
+    "SolutionSetting": [
+      {
+        "id": "2da89baf-38bc-4978-88fa-1e61e948ae67",
+        "slnid": "ff3acef8-90e3-46c4-b932-7a35a741f7cb",
+        "NamingOptions": {
+          "namingoption": 1,
+          "customname": null,
+          "namingextensionformat": {
+            "nameextensionformattype": 0,
+            "dateextesnionformatstring": "yyyy-MM-dd HH:mm::ss",
+            "nameextensionformatlocation": 0,
+            "sequencenumberleadingzeros": 0
+          }
+        },
+        "ZipOptions": {
+          "zipbackup": false,
+          "zippasswordprotect": false,
+          "zipbackuppasswordvalue": "",
+          "zipbackupsize": false,
+          "zipbackupsizevalue": 0
+        },
+        "BackupOptions": {
+          "Destination": null
+        },
+        "BackupReportOptions": {
+          "backupreporttype": 0,
+          "savebackupreport": false
+        },
+        "BackupLocationOptions": {
+          "locationoption": 1,
+          "customlocation": null
+        },
+        "BackupLimitOptions": {
+          "backuplimitoption": 0,
+          "backuplimitamount": 1
+        },
+        "Exclusions": {
+          "items": []
+        },
+        "RestoreLocationOptions": {
+          "locationoption": 0,
+          "customlocation": null
+        },
+        "createdatetime": "2025-03-03T18:03:39.8416053-08:00",
+        "backup": [
+          {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "backupdatetime": "0001-01-01T00:00:00",
+            "settingid": "00000000-0000-0000-0000-000000000000",
+            "backedupsolutionpath": null,
+            "backeduppath": null,
+            "backupname": null,
+            "source": null,
+            "type": null,
+            "note": null,
+            "createddatetime": "0001-01-01T00:00:00",
+            "backupreportfile": null,
+            "tags": null
+          }
+        ]
+      }
+    ]
+  }
+]
