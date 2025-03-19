@@ -12,6 +12,25 @@ namespace Auto_Typer
             InitializeComponent();
             rectangleDrawer = new RectangleDrawer();
             this.Paint += AutoTyper_Paint;
+            UpdateTextBoxLocation();
+        }
+
+        private void UpdateTextBoxLocation()
+        {
+            MainTextBorder.MainTextHeight = MainText.Height;
+            MainTextBorder.MainTextLength = MainText.Width;
+            MainTextBorder.MainTextX = MainText.Location.X;
+            MainTextBorder.MainTextY = MainText.Location.Y;
+
+            DelayMaxBorder.DelayMaxHeight = DelayMax.Height;
+            DelayMaxBorder.DelayMaxLength = DelayMax.Width;
+            DelayMaxBorder.DelayMaxX = DelayMax.Location.X;
+            DelayMaxBorder.DelayMaxY = DelayMax.Location.Y;
+
+            DelayMinBorder.DelayMinHeight = DelayMin.Height;
+            DelayMinBorder.DelayMinLength = DelayMin.Width;
+            DelayMinBorder.DelayMinX = DelayMin.Location.X;
+            DelayMinBorder.DelayMinY = DelayMin.Location.Y;
         }
 
         private void Form_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -164,6 +183,11 @@ namespace Auto_Typer
         {
             if (e.KeyChar == (char)Keys.Tab)
                 e.Handled = true;
+        }
+
+        private void customTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
