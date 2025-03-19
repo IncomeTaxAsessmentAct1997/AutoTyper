@@ -85,7 +85,7 @@
             // 
             hotkeytext4.AutoSize = true;
             hotkeytext4.Font = new Font("Microsoft Sans Serif", 12F);
-            hotkeytext4.Location = new Point(53, 353);
+            hotkeytext4.Location = new Point(53, 362);
             hotkeytext4.Name = "hotkeytext4";
             hotkeytext4.Size = new Size(134, 29);
             hotkeytext4.TabIndex = 15;
@@ -95,7 +95,7 @@
             // 
             label.AutoSize = true;
             label.Font = new Font("Microsoft Sans Serif", 12F);
-            label.Location = new Point(359, 353);
+            label.Location = new Point(359, 362);
             label.Name = "label";
             label.Size = new Size(21, 29);
             label.TabIndex = 18;
@@ -104,7 +104,7 @@
             // DelayMax
             // 
             DelayMax.BorderStyle = BorderStyle.None;
-            DelayMax.Location = new Point(395, 353);
+            DelayMax.Location = new Point(395, 362);
             DelayMax.MaxLength = 13;
             DelayMax.Multiline = true;
             DelayMax.Name = "DelayMax";
@@ -118,7 +118,7 @@
             // DelayMin
             // 
             DelayMin.BorderStyle = BorderStyle.None;
-            DelayMin.Location = new Point(197, 353);
+            DelayMin.Location = new Point(197, 362);
             DelayMin.MaxLength = 13;
             DelayMin.Multiline = true;
             DelayMin.Name = "DelayMin";

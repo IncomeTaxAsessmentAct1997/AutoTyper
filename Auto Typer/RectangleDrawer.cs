@@ -16,11 +16,11 @@
             Rectangle rect3 = new(196, 77, 149, 35);
             graphics.DrawRectangle(blackPen, rect3);
 
-            Rectangle rect4 = new(196, 349, 149, 38);
+            Rectangle rect4 = new(196, 358, 149, 38);
             graphics.FillRectangle(whiteBrush, rect4);
             graphics.DrawRectangle(blackPen, rect4);
 
-            Rectangle rect5 = new(394, 349, 149, 38);
+            Rectangle rect5 = new(394, 358, 149, 38);
             graphics.FillRectangle(whiteBrush, rect5);
             graphics.DrawRectangle(blackPen, rect5);
         }
