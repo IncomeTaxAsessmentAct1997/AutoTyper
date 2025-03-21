@@ -15,10 +15,8 @@ namespace Auto_Typer
         {
             base.OnPaint(pevent);
 
-            using (Pen borderPen = new Pen(Color.Black, 2))
-            {
-                pevent.Graphics.DrawRectangle(borderPen, 1, 1, this.Width - 2, this.Height - 2);
-            }
+            using Pen borderPen = new(Color.Black, 2);
+            pevent.Graphics.DrawRectangle(borderPen, 1, 1, this.Width - 2, this.Height - 2);
         }
         protected override bool ShowFocusCues => false;
     }

@@ -6,22 +6,29 @@ namespace Auto_Typer
 {
     class Main
     {
-        readonly bool isWriting = false;
-        readonly string text = $"";
-        int currentChar = 0;
-        readonly int currentMin = 0;
-        readonly int currentMax = 0;
-        readonly Random random = new();
+        private static string text = "";
+        private static int currentChar = 0;
+        private static int delayMin = 0;
+        private static int delayMax = 0;
+        private readonly Random random = new();
+
+        public static void SetTextAndDelay(string inputText, string minDelay, string maxDelay)
+        {
+            text = inputText;
+            delayMin = int.TryParse(minDelay, out int min) ? min : 0;
+            delayMax = int.TryParse(maxDelay, out int max) ? max : 0;
+            currentChar = 0;
+        }
 
         public void TypeText()
         {
-            int delay = random.Next(currentMin, currentMax);
-            Thread.Sleep(delay);
             if (currentChar < text.Length)
             {
-                SendKeys.SendWait(text[currentChar].ToString());
-                currentChar++;
-                TypeText();
+                int delay = random.Next(delayMin, delayMax); 
+                Thread.Sleep(delay); 
+                SendKeys.SendWait(text[currentChar].ToString()); 
+                currentChar++; 
+                TypeText();  
             }
         }
     }

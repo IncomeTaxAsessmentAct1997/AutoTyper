@@ -1,18 +1,38 @@
+using System.Net.NetworkInformation;
+using System.Security.AccessControl;
+
 namespace Auto_Typer
 {
     public partial class AutoTyper : Form
     {
         private readonly RectangleDrawer rectangleDrawer;
-        private Button? clickedButton;
-        private string originalButtonText = "Hotkey";
-        private bool isHotkeyMouseDown = false;
+        public string? text;
+        public string? max;
+        public string? min;
+        public string? lastkey1;
+        public string? lastkey2;
+        private Button? focusedButton;
+        private Button? unfocusedButton;
 
         public AutoTyper()
         {
             InitializeComponent();
             rectangleDrawer = new RectangleDrawer();
             this.Paint += AutoTyper_Paint;
+            this.KeyDown += GlobalKeyDown;
+            this.KeyPreview = true;
+            Hotkey1.Leave += Hotkey_LostFocus;
+            Hotkey2.Leave += Hotkey_LostFocus;
             UpdateTextBoxLocation();
+        }
+
+        private void GlobalKeyDown(object? sender, KeyEventArgs e)
+        {
+            string globalKey = GetKeyName(e);
+            if (globalKey == Hotkey1.Text)
+            {
+               Main.SetTextAndDelay(MainText.Text, DelayMin.Text, DelayMax.Text);
+            }
         }
 
         private void UpdateTextBoxLocation()
@@ -22,15 +42,15 @@ namespace Auto_Typer
             MainTextBorder.MainTextX = MainText.Location.X;
             MainTextBorder.MainTextY = MainText.Location.Y;
 
-            DelayMaxBorder.DelayMaxHeight = DelayMax.Height;
-            DelayMaxBorder.DelayMaxLength = DelayMax.Width;
-            DelayMaxBorder.DelayMaxX = DelayMax.Location.X;
-            DelayMaxBorder.DelayMaxY = DelayMax.Location.Y;
+            DelayMaxBorder.DelayMaxHeight = DelayMaxPanel.Height;
+            DelayMaxBorder.DelayMaxLength = DelayMaxPanel.Width;
+            DelayMaxBorder.DelayMaxX = DelayMaxPanel.Location.X;
+            DelayMaxBorder.DelayMaxY = DelayMaxPanel.Location.Y;
 
-            DelayMinBorder.DelayMinHeight = DelayMin.Height;
-            DelayMinBorder.DelayMinLength = DelayMin.Width;
-            DelayMinBorder.DelayMinX = DelayMin.Location.X;
-            DelayMinBorder.DelayMinY = DelayMin.Location.Y;
+            DelayMinBorder.DelayMinHeight = DelayMinPanel.Height;
+            DelayMinBorder.DelayMinLength = DelayMinPanel.Width;
+            DelayMinBorder.DelayMinX = DelayMinPanel.Location.X;
+            DelayMinBorder.DelayMinY = DelayMinPanel.Location.Y;
         }
 
         private void Form_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -45,71 +65,35 @@ namespace Auto_Typer
             ControlPaint.DrawBorder(e.Graphics, MainText.Bounds, Color.Black, ButtonBorderStyle.Solid);
         }
 
-        private void Hotkey_MouseDown(object sender, MouseEventArgs e)
+        public void Hotkey_GotFocus(object sender, MouseEventArgs e)
         {
-            if (sender is not Button btn)
-                return;
-
-            if (clickedButton != btn)
+            focusedButton = sender as Button;
+            if (focusedButton.Text != "Press Any Key")
             {
-                ResetPreviousButton();
-                SetupButtonForHotkeyInput(btn);
+                if (focusedButton.Name == "Hotkey1")
+                {
+                    lastkey1 = focusedButton.Text;
+                }
+                else
+                {
+                    lastkey2 = focusedButton.Text;
+                }
+                focusedButton.Text = "Press Any Key";
+                focusedButton.Focus();
             }
         }
 
-        private void ResetPreviousButton()
+        public void Hotkey_LostFocus(object? sender, EventArgs e)
         {
-            if (clickedButton != null)
+            unfocusedButton = sender as Button;
+            if (unfocusedButton.Name == "Hotkey1")
             {
-                clickedButton.Text = originalButtonText;
-                clickedButton.KeyDown -= Hotkey_KeyDown;
-                clickedButton.LostFocus -= Hotkey_LostFocus;
-            }
-        }
-
-        private void SetupButtonForHotkeyInput(Button btn)
-        {
-            clickedButton = btn;
-            originalButtonText = btn.Text;
-            btn.Text = "Press Any Key";
-            btn.Focus();
-            btn.KeyDown += Hotkey_KeyDown;
-            btn.LostFocus += Hotkey_LostFocus;
-        }
-
-        private void Hotkey_KeyDown(object? sender, KeyEventArgs e)
-        {
-            if (sender is not Button btn || clickedButton == null)
-                return;
-
-            string keyPressed = GetKeyName(e);
-            Console.WriteLine($"Button clicked: {clickedButton?.Name}, Key pressed: {keyPressed}");
-
-            if (HasDuplicateHotkey(keyPressed))
-            {
-                MessageBox.Show("Can't have the same key for both Start/Pause, and Stop", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ResetButton(btn);
+                unfocusedButton.Text = lastkey1;
             }
             else
             {
-                btn.Text = keyPressed;
-                isHotkeyMouseDown = true;
-                btn.KeyDown -= Hotkey_KeyDown;
-                btn.LostFocus -= Hotkey_LostFocus;
-                clickedButton = null;
+                unfocusedButton.Text = lastkey2;
             }
-        }
-
-        private bool HasDuplicateHotkey(string keyPressed)
-        {
-            return (clickedButton == Hotkey1 && keyPressed == Hotkey2.Text) ||
-                   (clickedButton == Hotkey2 && keyPressed == Hotkey1.Text);
-        }
-
-        private void ResetButton(Button btn)
-        {
-            btn.Text = originalButtonText;
-            isHotkeyMouseDown = false;
         }
 
         private static string GetKeyName(KeyEventArgs e)
@@ -151,24 +135,6 @@ namespace Auto_Typer
             return keyName;
         }
 
-        private void Hotkey_LostFocus(object? sender, EventArgs e)
-        {
-            if (sender is not Button btn)
-                return;
-
-            if (!isHotkeyMouseDown)
-                btn.Text = originalButtonText;
-
-            btn.KeyDown -= Hotkey_KeyDown;
-            btn.LostFocus -= Hotkey_LostFocus;
-
-            if (clickedButton != null && sender == clickedButton)
-            {
-                clickedButton.Text = originalButtonText;
-                clickedButton = null;
-                isHotkeyMouseDown = false;
-            }
-        }
 
         private void Delay_KeyPress(object? sender, KeyPressEventArgs e)
         {
@@ -185,9 +151,11 @@ namespace Auto_Typer
                 e.Handled = true;
         }
 
-        private void customTextBox1_TextChanged(object sender, EventArgs e)
+        private new void TextChanged(object sender, EventArgs e)
         {
-
+            text = MainText.Text;
+            max = DelayMin.Text;
+            min = DelayMin.Text;
         }
     }
 }

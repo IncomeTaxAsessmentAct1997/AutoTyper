@@ -39,16 +39,20 @@
             MainText = new TextBox();
             Hotkey2 = new CustomButton();
             Hotkey1 = new CustomButton();
+            DelayMaxPanel = new Panel();
+            DelayMinPanel = new Panel();
+            DelayMaxPanel.SuspendLayout();
+            DelayMinPanel.SuspendLayout();
             SuspendLayout();
             // 
             // hotkeytext2
             // 
             hotkeytext2.AutoSize = true;
-            hotkeytext2.Font = new Font("Microsoft Sans Serif", 12F);
-            hotkeytext2.Location = new Point(118, 78);
+            hotkeytext2.Font = new Font("Microsoft Sans Serif", 11F);
+            hotkeytext2.Location = new Point(98, 64);
             hotkeytext2.Margin = new Padding(2, 0, 2, 0);
             hotkeytext2.Name = "hotkeytext2";
-            hotkeytext2.Size = new Size(69, 29);
+            hotkeytext2.Size = new Size(53, 24);
             hotkeytext2.TabIndex = 4;
             hotkeytext2.Text = "Stop:";
             // 
@@ -56,43 +60,43 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 12F);
-            label1.Location = new Point(121, 144);
+            label1.Location = new Point(97, 115);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 29);
+            label1.Size = new Size(0, 25);
             label1.TabIndex = 9;
             // 
             // hotkeytext1
             // 
             hotkeytext1.AutoSize = true;
             hotkeytext1.BackColor = Color.Transparent;
-            hotkeytext1.Font = new Font("Microsoft Sans Serif", 13F);
-            hotkeytext1.Location = new Point(26, 30);
+            hotkeytext1.Font = new Font("Microsoft Sans Serif", 11F);
+            hotkeytext1.Location = new Point(42, 26);
             hotkeytext1.Margin = new Padding(2, 0, 2, 0);
             hotkeytext1.Name = "hotkeytext1";
-            hotkeytext1.Size = new Size(153, 30);
+            hotkeytext1.Size = new Size(109, 24);
             hotkeytext1.TabIndex = 3;
             hotkeytext1.Text = "Start/Pause:";
             // 
             // hotkeytext3
             // 
             hotkeytext3.AutoSize = true;
-            hotkeytext3.Font = new Font("Microsoft Sans Serif", 12F);
-            hotkeytext3.Location = new Point(118, 142);
+            hotkeytext3.Font = new Font("Microsoft Sans Serif", 11F);
+            hotkeytext3.Location = new Point(99, 115);
             hotkeytext3.Margin = new Padding(2, 0, 2, 0);
             hotkeytext3.Name = "hotkeytext3";
-            hotkeytext3.Size = new Size(66, 29);
+            hotkeytext3.Size = new Size(52, 24);
             hotkeytext3.TabIndex = 12;
             hotkeytext3.Text = "Text:";
             // 
             // hotkeytext4
             // 
             hotkeytext4.AutoSize = true;
-            hotkeytext4.Font = new Font("Microsoft Sans Serif", 12F);
-            hotkeytext4.Location = new Point(52, 362);
+            hotkeytext4.Font = new Font("Microsoft Sans Serif", 11F);
+            hotkeytext4.Location = new Point(47, 291);
             hotkeytext4.Margin = new Padding(2, 0, 2, 0);
             hotkeytext4.Name = "hotkeytext4";
-            hotkeytext4.Size = new Size(134, 29);
+            hotkeytext4.Size = new Size(104, 24);
             hotkeytext4.TabIndex = 15;
             hotkeytext4.Text = "Delay (ms):";
             // 
@@ -100,37 +104,36 @@
             // 
             label.AutoSize = true;
             label.Font = new Font("Microsoft Sans Serif", 12F);
-            label.Location = new Point(352, 362);
+            label.Location = new Point(284, 287);
             label.Margin = new Padding(2, 0, 2, 0);
             label.Name = "label";
-            label.Size = new Size(21, 29);
+            label.Size = new Size(19, 25);
             label.TabIndex = 18;
             label.Text = "-";
             // 
             // DelayMax
             // 
             DelayMax.BorderStyle = BorderStyle.None;
-            DelayMax.Location = new Point(385, 362);
+            DelayMax.Location = new Point(2, -2);
             DelayMax.Margin = new Padding(2);
             DelayMax.MaxLength = 13;
             DelayMax.Multiline = true;
             DelayMax.Name = "DelayMax";
-            DelayMax.Size = new Size(141, 29);
+            DelayMax.Size = new Size(113, 23);
             DelayMax.TabIndex = 19;
             DelayMax.Text = "250";
             DelayMax.TextAlign = HorizontalAlignment.Center;
-            DelayMax.KeyPress += Delay_KeyPress;
             DelayMax.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // DelayMin
             // 
             DelayMin.BorderStyle = BorderStyle.None;
-            DelayMin.Location = new Point(198, 362);
+            DelayMin.Location = new Point(2, -2);
             DelayMin.Margin = new Padding(2);
             DelayMin.MaxLength = 13;
             DelayMin.Multiline = true;
             DelayMin.Name = "DelayMin";
-            DelayMin.Size = new Size(141, 29);
+            DelayMin.Size = new Size(113, 23);
             DelayMin.TabIndex = 20;
             DelayMin.Text = "150";
             DelayMin.TextAlign = HorizontalAlignment.Center;
@@ -140,14 +143,15 @@
             // MainText
             // 
             MainText.BorderStyle = BorderStyle.None;
-            MainText.Location = new Point(198, 146);
+            MainText.Location = new Point(159, 117);
             MainText.Margin = new Padding(2);
             MainText.Multiline = true;
             MainText.Name = "MainText";
             MainText.ScrollBars = ScrollBars.Both;
-            MainText.Size = new Size(508, 181);
+            MainText.Size = new Size(406, 145);
             MainText.TabIndex = 13;
             MainText.Text = "Insert Text Here";
+            MainText.TextChanged += TextChanged;
             MainText.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // Hotkey2
@@ -157,14 +161,14 @@
             Hotkey2.FlatAppearance.MouseDownBackColor = Color.White;
             Hotkey2.FlatAppearance.MouseOverBackColor = Color.White;
             Hotkey2.FlatStyle = FlatStyle.Flat;
-            Hotkey2.Location = new Point(196, 78);
+            Hotkey2.Location = new Point(157, 62);
             Hotkey2.Margin = new Padding(2);
             Hotkey2.Name = "Hotkey2";
-            Hotkey2.Size = new Size(150, 38);
+            Hotkey2.Size = new Size(120, 30);
             Hotkey2.TabIndex = 21;
             Hotkey2.Text = "F3";
             Hotkey2.UseVisualStyleBackColor = false;
-            Hotkey2.MouseDown += Hotkey_MouseDown;
+            Hotkey2.MouseDown += Hotkey_GotFocus;
             Hotkey2.PreviewKeyDown += Form_PreviewKeyDown;
             // 
             // Hotkey1
@@ -174,26 +178,46 @@
             Hotkey1.FlatAppearance.MouseDownBackColor = Color.White;
             Hotkey1.FlatAppearance.MouseOverBackColor = Color.White;
             Hotkey1.FlatStyle = FlatStyle.Flat;
-            Hotkey1.Location = new Point(196, 30);
+            Hotkey1.Location = new Point(157, 24);
             Hotkey1.Margin = new Padding(2);
             Hotkey1.Name = "Hotkey1";
-            Hotkey1.Size = new Size(150, 38);
+            Hotkey1.Size = new Size(120, 30);
             Hotkey1.TabIndex = 22;
             Hotkey1.Text = "F2";
             Hotkey1.UseVisualStyleBackColor = false;
-            Hotkey1.MouseDown += Hotkey_MouseDown;
+            Hotkey1.MouseDown += Hotkey_GotFocus;
             Hotkey1.PreviewKeyDown += Form_PreviewKeyDown;
+            // 
+            // DelayMaxPanel
+            // 
+            DelayMaxPanel.BackColor = Color.White;
+            DelayMaxPanel.Controls.Add(DelayMax);
+            DelayMaxPanel.Location = new Point(307, 294);
+            DelayMaxPanel.Name = "DelayMaxPanel";
+            DelayMaxPanel.Padding = new Padding(500);
+            DelayMaxPanel.Size = new Size(114, 21);
+            DelayMaxPanel.TabIndex = 23;
+            // 
+            // DelayMinPanel
+            // 
+            DelayMinPanel.BackColor = Color.White;
+            DelayMinPanel.Controls.Add(DelayMin);
+            DelayMinPanel.Location = new Point(159, 294);
+            DelayMinPanel.Name = "DelayMinPanel";
+            DelayMinPanel.Padding = new Padding(500);
+            DelayMinPanel.Size = new Size(114, 21);
+            DelayMinPanel.TabIndex = 24;
             // 
             // AutoTyper
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(640, 360);
+            Controls.Add(DelayMinPanel);
+            Controls.Add(DelayMaxPanel);
             Controls.Add(Hotkey1);
             Controls.Add(Hotkey2);
             Controls.Add(MainText);
-            Controls.Add(DelayMin);
-            Controls.Add(DelayMax);
             Controls.Add(label);
             Controls.Add(hotkeytext4);
             Controls.Add(hotkeytext3);
@@ -202,8 +226,13 @@
             Controls.Add(hotkeytext1);
             Margin = new Padding(2);
             Name = "AutoTyper";
-            Text = "Auto Typer";
+            Text = "X";
+            KeyDown += GlobalKeyDown;
             PreviewKeyDown += Form_PreviewKeyDown;
+            DelayMaxPanel.ResumeLayout(false);
+            DelayMaxPanel.PerformLayout();
+            DelayMinPanel.ResumeLayout(false);
+            DelayMinPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -220,5 +249,7 @@
         private TextBox DelayMin;
         private CustomButton Hotkey2;
         private CustomButton Hotkey1;
+        private Panel DelayMaxPanel;
+        private Panel DelayMinPanel;
     }
 }
