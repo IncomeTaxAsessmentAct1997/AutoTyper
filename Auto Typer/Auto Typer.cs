@@ -1,11 +1,17 @@
+using Auto_Typer.Helpers;
+using System;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Windows.Forms;
 
 namespace Auto_Typer
 {
     public partial class AutoTyper : Form
     {
         private readonly RectangleDrawer rectangleDrawer;
+        private GlobalHotkey? ghk;
+
         public string? text;
         public string? max;
         public string? min;
@@ -13,17 +19,31 @@ namespace Auto_Typer
         public string? lastkey2;
         private Button? focusedButton;
         private Button? unfocusedButton;
+        private bool keychange;
 
         public AutoTyper()
         {
             InitializeComponent();
             rectangleDrawer = new RectangleDrawer();
-            this.Paint += AutoTyper_Paint;
-            this.KeyDown += GlobalKeyDown;
             this.KeyPreview = true;
-            Hotkey1.Leave += Hotkey_LostFocus;
-            Hotkey2.Leave += Hotkey_LostFocus;
             UpdateTextBoxLocation();
+            ghk = new GlobalHotkey(Keys.F2, this);
+            ghk.Register();
+        }
+
+
+        private void PreventFocusShift(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        // Put global commands here
+        private void HandleHotkey()
+        {
+            MessageBox.Show("Global Hotkey F2 Pressed!", "Hotkey Detected", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void GlobalKeyDown(object? sender, KeyEventArgs e)
@@ -31,7 +51,9 @@ namespace Auto_Typer
             string globalKey = GetKeyName(e);
             if (globalKey == Hotkey1.Text)
             {
-               Main.SetTextAndDelay(MainText.Text, DelayMin.Text, DelayMax.Text);
+                MessageBox.Show("Program Started");
+                MainText.BackColor = Color.White;
+                Main.SetTextAndDelay(MainText.Text, DelayMin.Text, DelayMax.Text);
             }
         }
 
@@ -53,20 +75,15 @@ namespace Auto_Typer
             DelayMinBorder.DelayMinY = DelayMinPanel.Location.Y;
         }
 
-        private void Form_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyCode == Keys.Tab)
-                e.IsInputKey = true;
-        }
-
         private void AutoTyper_Paint(object? sender, PaintEventArgs e)
         {
             RectangleDrawer.DrawRectangles(e.Graphics);
             ControlPaint.DrawBorder(e.Graphics, MainText.Bounds, Color.Black, ButtonBorderStyle.Solid);
         }
 
-        public void Hotkey_GotFocus(object sender, MouseEventArgs e)
+        public void Hotkey_GotFocus(object? sender, MouseEventArgs e)
         {
+            keychange = false;
             focusedButton = sender as Button;
             if (focusedButton.Text != "Press Any Key")
             {
@@ -83,16 +100,25 @@ namespace Auto_Typer
             }
         }
 
+        public void SetHotkey(object? sender, KeyEventArgs e)
+        {
+            focusedButton.Text = GetKeyName(e);
+            keychange = true;
+        }
+
         public void Hotkey_LostFocus(object? sender, EventArgs e)
         {
             unfocusedButton = sender as Button;
-            if (unfocusedButton.Name == "Hotkey1")
+            if (keychange == false)
             {
-                unfocusedButton.Text = lastkey1;
-            }
-            else
-            {
-                unfocusedButton.Text = lastkey2;
+                if (unfocusedButton.Name == "Hotkey1")
+                {
+                    unfocusedButton.Text = lastkey1;
+                }
+                else
+                {
+                    unfocusedButton.Text = lastkey2;
+                }
             }
         }
 
@@ -135,20 +161,12 @@ namespace Auto_Typer
             return keyName;
         }
 
-
         private void Delay_KeyPress(object? sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar) ||
-                e.KeyChar == (char)Keys.Tab || e.KeyChar == (char)Keys.Enter)
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar) || e.KeyChar == (char)Keys.Tab || e.KeyChar == (char)Keys.Enter)
             {
                 e.Handled = true;
             }
-        }
-
-        private void AutoTyper_KeyPress(object? sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Tab)
-                e.Handled = true;
         }
 
         private new void TextChanged(object sender, EventArgs e)
@@ -156,6 +174,27 @@ namespace Auto_Typer
             text = MainText.Text;
             max = DelayMin.Text;
             min = DelayMin.Text;
+        }
+
+        // Handles the global hotkey
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            ghk?.Unregister();
+            base.OnFormClosing(e);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == Constants.WM_HOTKEY_MSG_ID)
+            {
+                HandleHotkey();
+            }
+            base.WndProc(ref m);
+        }
+
+        public static class Constants
+        {
+            public const int WM_HOTKEY_MSG_ID = 0x0312;
         }
     }
 }

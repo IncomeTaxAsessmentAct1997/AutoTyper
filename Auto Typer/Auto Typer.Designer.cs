@@ -36,11 +36,11 @@
             label = new Label();
             DelayMax = new TextBox();
             DelayMin = new TextBox();
-            MainText = new TextBox();
             Hotkey2 = new CustomButton();
             Hotkey1 = new CustomButton();
             DelayMaxPanel = new Panel();
             DelayMinPanel = new Panel();
+            MainText = new TextBox();
             DelayMaxPanel.SuspendLayout();
             DelayMinPanel.SuspendLayout();
             SuspendLayout();
@@ -123,7 +123,9 @@
             DelayMax.TabIndex = 19;
             DelayMax.Text = "250";
             DelayMax.TextAlign = HorizontalAlignment.Center;
-            DelayMax.PreviewKeyDown += Form_PreviewKeyDown;
+            DelayMax.KeyDown += GlobalKeyDown;
+            DelayMax.KeyPress += Delay_KeyPress;
+            DelayMax.PreviewKeyDown += PreventFocusShift;
             // 
             // DelayMin
             // 
@@ -137,22 +139,9 @@
             DelayMin.TabIndex = 20;
             DelayMin.Text = "150";
             DelayMin.TextAlign = HorizontalAlignment.Center;
+            DelayMin.KeyDown += GlobalKeyDown;
             DelayMin.KeyPress += Delay_KeyPress;
-            DelayMin.PreviewKeyDown += Form_PreviewKeyDown;
-            // 
-            // MainText
-            // 
-            MainText.BorderStyle = BorderStyle.None;
-            MainText.Location = new Point(159, 117);
-            MainText.Margin = new Padding(2);
-            MainText.Multiline = true;
-            MainText.Name = "MainText";
-            MainText.ScrollBars = ScrollBars.Both;
-            MainText.Size = new Size(406, 145);
-            MainText.TabIndex = 13;
-            MainText.Text = "Insert Text Here";
-            MainText.TextChanged += TextChanged;
-            MainText.PreviewKeyDown += Form_PreviewKeyDown;
+            DelayMin.PreviewKeyDown += PreventFocusShift;
             // 
             // Hotkey2
             // 
@@ -168,8 +157,10 @@
             Hotkey2.TabIndex = 21;
             Hotkey2.Text = "F3";
             Hotkey2.UseVisualStyleBackColor = false;
+            Hotkey2.KeyDown += SetHotkey;
             Hotkey2.MouseDown += Hotkey_GotFocus;
-            Hotkey2.PreviewKeyDown += Form_PreviewKeyDown;
+            Hotkey2.MouseLeave += Hotkey_LostFocus;
+            Hotkey2.PreviewKeyDown += PreventFocusShift;
             // 
             // Hotkey1
             // 
@@ -185,8 +176,10 @@
             Hotkey1.TabIndex = 22;
             Hotkey1.Text = "F2";
             Hotkey1.UseVisualStyleBackColor = false;
+            Hotkey1.KeyDown += SetHotkey;
             Hotkey1.MouseDown += Hotkey_GotFocus;
-            Hotkey1.PreviewKeyDown += Form_PreviewKeyDown;
+            Hotkey1.MouseLeave += Hotkey_LostFocus;
+            Hotkey1.PreviewKeyDown += PreventFocusShift;
             // 
             // DelayMaxPanel
             // 
@@ -208,16 +201,29 @@
             DelayMinPanel.Size = new Size(114, 21);
             DelayMinPanel.TabIndex = 24;
             // 
+            // MainText
+            // 
+            MainText.BorderStyle = BorderStyle.None;
+            MainText.Location = new Point(159, 115);
+            MainText.Margin = new Padding(2);
+            MainText.Multiline = true;
+            MainText.Name = "MainText";
+            MainText.ScrollBars = ScrollBars.Both;
+            MainText.Size = new Size(406, 145);
+            MainText.TabIndex = 25;
+            MainText.Text = "Insert Text Here";
+            MainText.PreviewKeyDown += PreventFocusShift;
+            // 
             // AutoTyper
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(640, 360);
+            Controls.Add(MainText);
             Controls.Add(DelayMinPanel);
             Controls.Add(DelayMaxPanel);
             Controls.Add(Hotkey1);
             Controls.Add(Hotkey2);
-            Controls.Add(MainText);
             Controls.Add(label);
             Controls.Add(hotkeytext4);
             Controls.Add(hotkeytext3);
@@ -227,8 +233,8 @@
             Margin = new Padding(2);
             Name = "AutoTyper";
             Text = "X";
+            Paint += AutoTyper_Paint;
             KeyDown += GlobalKeyDown;
-            PreviewKeyDown += Form_PreviewKeyDown;
             DelayMaxPanel.ResumeLayout(false);
             DelayMaxPanel.PerformLayout();
             DelayMinPanel.ResumeLayout(false);
@@ -242,7 +248,6 @@
         private Label label1;
         private Label hotkeytext1;
         private Label hotkeytext3;
-        private TextBox MainText;
         private Label hotkeytext4;
         private Label label;
         private TextBox DelayMax;
@@ -251,5 +256,6 @@
         private CustomButton Hotkey1;
         private Panel DelayMaxPanel;
         private Panel DelayMinPanel;
+        private TextBox MainText;
     }
 }
