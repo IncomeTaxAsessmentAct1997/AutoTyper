@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Auto_Typer.Helpers
+namespace Auto_Typer
 {
     public class GlobalHotkey
     {

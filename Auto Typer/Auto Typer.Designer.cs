@@ -158,8 +158,9 @@
             Hotkey2.Text = "F3";
             Hotkey2.UseVisualStyleBackColor = false;
             Hotkey2.KeyDown += SetHotkey;
+            Hotkey2.KeyUp += Hotkey_KeyUp;
+            Hotkey2.Leave += Hotkey_LostFocus;
             Hotkey2.MouseDown += Hotkey_GotFocus;
-            Hotkey2.MouseLeave += Hotkey_LostFocus;
             Hotkey2.PreviewKeyDown += PreventFocusShift;
             // 
             // Hotkey1
@@ -177,8 +178,9 @@
             Hotkey1.Text = "F2";
             Hotkey1.UseVisualStyleBackColor = false;
             Hotkey1.KeyDown += SetHotkey;
+            Hotkey1.KeyUp += Hotkey_KeyUp;
+            Hotkey1.Leave += Hotkey_LostFocus;
             Hotkey1.MouseDown += Hotkey_GotFocus;
-            Hotkey1.MouseLeave += Hotkey_LostFocus;
             Hotkey1.PreviewKeyDown += PreventFocusShift;
             // 
             // DelayMaxPanel
@@ -232,7 +234,7 @@
             Controls.Add(hotkeytext1);
             Margin = new Padding(2);
             Name = "AutoTyper";
-            Text = "X";
+            Text = "Auto Typer by Duncan Jones";
             Paint += AutoTyper_Paint;
             KeyDown += GlobalKeyDown;
             DelayMaxPanel.ResumeLayout(false);

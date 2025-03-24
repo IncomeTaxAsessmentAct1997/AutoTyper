@@ -1,4 +1,4 @@
-using Auto_Typer.Helpers;
+using Auto_Typer;
 using System;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
@@ -9,7 +9,7 @@ namespace Auto_Typer
 {
     public partial class AutoTyper : Form
     {
-        private readonly RectangleDrawer rectangleDrawer;
+        private RectangleDrawer rectangleDrawer;
         private GlobalHotkey? ghk;
 
         public string? text;
@@ -34,22 +34,21 @@ namespace Auto_Typer
 
         private void PreventFocusShift(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.Tab)
+            if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
                 e.IsInputKey = true;
             }
         }
 
         // Put global commands here
-        private void HandleHotkey()
+        private static void HandleHotkey()
         {
             MessageBox.Show("Global Hotkey F2 Pressed!", "Hotkey Detected", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void GlobalKeyDown(object? sender, KeyEventArgs e)
         {
-            string globalKey = GetKeyName(e);
-            if (globalKey == Hotkey1.Text)
+            if ((unfocusedButton == null || unfocusedButton.Text != GetKeyName(e)) && Hotkey1.Text == GetKeyName(e) && !this.ContainsFocus)
             {
                 MessageBox.Show("Program Started");
                 MainText.BackColor = Color.White;
@@ -83,32 +82,51 @@ namespace Auto_Typer
 
         public void Hotkey_GotFocus(object? sender, MouseEventArgs e)
         {
-            keychange = false;
+
             focusedButton = sender as Button;
             if (focusedButton.Text != "Press Any Key")
             {
                 if (focusedButton.Name == "Hotkey1")
                 {
                     lastkey1 = focusedButton.Text;
+                    unfocusedButton = Hotkey2;
                 }
                 else
                 {
                     lastkey2 = focusedButton.Text;
+                    unfocusedButton = Hotkey1;
                 }
                 focusedButton.Text = "Press Any Key";
                 focusedButton.Focus();
+                keychange = false;
             }
         }
 
         public void SetHotkey(object? sender, KeyEventArgs e)
         {
-            focusedButton.Text = GetKeyName(e);
-            keychange = true;
+            if (unfocusedButton.Text != GetKeyName(e) || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu)
+            {
+                focusedButton.Text = GetKeyName(e);
+                keychange = true;
+            }
+            else
+            {
+                MessageBox.Show("Both functions can't have the same hotkey", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void Hotkey_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (focusedButton.Text == unfocusedButton.Text)
+            {
+                focusedButton.Text = "Press Any Key";
+                MessageBox.Show("Both functions can't have the same hotkey", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         public void Hotkey_LostFocus(object? sender, EventArgs e)
         {
-            unfocusedButton = sender as Button;
+
             if (keychange == false)
             {
                 if (unfocusedButton.Name == "Hotkey1")
@@ -120,12 +138,31 @@ namespace Auto_Typer
                     unfocusedButton.Text = lastkey2;
                 }
             }
+            if (focusedButton.Text == unfocusedButton.Text)
+            {
+                focusedButton.Text = "Press Any Key";
+                MessageBox.Show("Both functions can't have the same hotkey" + keychange, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                focusedButton.Focus();
+                keychange = false;
+            }
         }
 
         private static string GetKeyName(KeyEventArgs e)
         {
             string keyName = e.KeyCode switch
             {
+                Keys.Oem3 => "`",
+                Keys.Oemcomma => ",",
+                Keys.OemPeriod => ".",
+                Keys.OemPipe => "\\",
+                Keys.OemMinus => "-",
+                Keys.Oemplus => "=",
+                Keys.Oem2 => "/",
+                Keys.Oem4 => "[",
+                Keys.Oem6 => "]",
+                Keys.Oem7 => "'",
+                Keys.OemSemicolon => ";",
+                Keys.Next => "PageDn",
                 Keys.D1 => "1",
                 Keys.D2 => "2",
                 Keys.D3 => "3",
